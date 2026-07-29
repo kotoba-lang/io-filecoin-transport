@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  jvm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          cli: latest
+      - run: clojure -M:lint
+      - run: clojure -M:test
+
+  cljs:
+    # Not redundant with the JVM job: IHttp returns a map there and a Promise
+    # here, so every sequence in filecoin.client composes differently on this
+    # path. The assertion counts on the two runtimes must match — they did not
+    # once, and both reported green.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: DeLaGuardo/setup-clojure@13.4
+        with:
+          cli: latest
+      - run: npm install -g nbb
+      - run: npm ci
+      - run: nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljs
+
+  # The live suite is deliberately absent. It talks to a public mainnet
+  # endpoint, so it is neither hermetic nor free of someone else's rate limit;
+  # its results are recorded in the README instead. Run it with `npm run live`.

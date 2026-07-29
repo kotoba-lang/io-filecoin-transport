@@ -1,0 +1,20 @@
+#!/usr/bin/env nbb
+;; Run the offline suite on the ClojureScript side.
+;;
+;; Not a formality: `IHttp` returns a map on the JVM and a Promise here, so
+;; every sequence in `filecoin.client` composes differently on this path.
+;; The live suite is separate — `npm run live`, and it is not run in CI.
+;;
+;;   nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljs
+(ns verify-cljs
+  (:require [clojure.test :as t]
+            [filecoin.client-test]))
+
+(defmethod t/report [:cljs.test/default :end-run-tests] [m]
+  (println)
+  (if (t/successful? m)
+    (println "all checks passed on the ClojureScript path")
+    (do (println "FAILED on the ClojureScript path")
+        (js/process.exit 1))))
+
+(t/run-tests 'filecoin.client-test)
