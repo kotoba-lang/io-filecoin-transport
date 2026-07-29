@@ -73,8 +73,9 @@ endpoint: https://api.node.glif.io/rpc/v1
   ok   GasEstimateMessageGas → {:gas-limit 926078, :gas-fee-cap "54773194", :gas-premium "101618"}
   ok   PDPVerifier.getChallengeFinality() via StateCall → ["150"]
   ok   PDPVerifier.getNextDataSetId() via StateCall → ["1413"]
+  ok   signature accepted by a real node (differential probe)
 
-7 checks, 0 failed
+8 checks, 0 failed
 ```
 
 The last two are the ones worth having. They run a real call against the
@@ -83,6 +84,36 @@ number, the CBOR params wrapper, `f410f` addressing, the function selector and
 ABI decoding — five repos at once, and no offline test can show that they are
 right *together*.
 
+### Proving the signature without spending anything
+
+The last check settles what was previously only argued for: that a signature
+produced by `io-filecoin-signer` is accepted by a real implementation.
+
+lotus validates a pushed message in `MessagePool.Add` as `checkMessage` →
+`ValidForBlockInclusion` → **`VerifyMsgSig`**, and only *afterwards* looks the
+sender's actor up. So push the same message twice from an empty account —
+once signed properly, once with a single bit flipped in the signature — and
+the two rejections come from different places:
+
+```
+our signature      failed to look up actor state nonce: resolution lookup failed
+one bit flipped    signature verification failed: failed to validate signature
+```
+
+Two *different* errors is the evidence. The same error twice would mean the
+signature was never reached and the run proved nothing, which is why the probe
+fails rather than passes in that case.
+
+Nothing is spent and nothing lands: the account's balance is read first and
+the push is skipped unless it is exactly zero, so both messages are rejected
+by construction. Calibration rather than mainnet, because a probe belongs on a
+testnet.
+
+What this establishes is precise: **lotus's `VerifyMsgSig` accepts what this
+code signs** — the digest, the 65-byte format, the address derivation and the
+CBOR. It says nothing about whether a message would *execute* correctly, or
+about the gas and nonce logic on a funded account.
+
 The live suite found a bug on its first run: `filecoin.rpc/message->json`
 skipped normalisation when `:to` was present, which is true of exactly the raw
 map a caller writes by hand, and handed a string to the address encoder. Lotus
@@ -90,8 +121,8 @@ answers that with `unmarshaling params: unknown address protocol`, which reads
 as a malformed request rather than an un-normalised one. Fixed in io-filecoin
 `244db55`.
 
-**20 assertions offline, green on both runtimes; 7 live checks against
-mainnet.**
+**20 assertions offline, green on both runtimes; 8 live checks against
+mainnet and calibration.**
 
 ```sh
 clojure -M:test        # JVM, offline
@@ -119,6 +150,8 @@ asserted 10 where the JVM asserted 19. Every async test now goes through
 
 ## Scope
 
-**No message signed by this code has been sent to a network.** Every live
-check above is a read. Sending needs a funded account, and the failure modes
-of the write path are therefore still only argued for, not demonstrated.
+**No message signed by this code has ever landed on a chain.** Two are pushed
+by the probe above, both from an empty account and both rejected — that
+demonstrates the signature is accepted, not that a send works end to end.
+A real send needs a funded account, so the gas and nonce logic on the write
+path remains argued for rather than demonstrated.
