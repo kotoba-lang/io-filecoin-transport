@@ -128,7 +128,34 @@ mainnet and calibration.**
 clojure -M:test        # JVM, offline
 npm run test:cljs      # nbb, offline
 npm run live           # mainnet, read-only
+npm run probe:delegated  # calibration, the delegated-path differential
 ```
+
+### The delegated-path probe
+
+`scripts/probe-delegated.cljs` establishes that lotus accepts a **type-3**
+(FEVM) message built by `filecoin.signer.eth`, without spending anything. It
+pushes three messages from an account that has never existed and reads which
+check caught each:
+
+```
+correct               Actor not found                  ← past AuthenticateMessage entirely
+corrupted signature   Could not recover public key     ← the signature branch is live
+method changed        signature verification failed:
+                        failed to reconstruct          ← the round-trip check is live
+```
+
+`AuthenticateMessage` rebuilds the Ethereum transaction from the message,
+requires the message to re-encode identically, and only then verifies the
+signature — all before the sender's actor is looked up. So the first line
+means both passed, and the other two show neither check was skipped.
+
+Getting this case right took three attempts, which is the point of writing
+the verdict so it *fails* rather than passes when inconclusive: swapping the
+gas fields is refused earlier by `ValidForBlockInclusion` (premium > cap), and
+bumping the nonce round-trips fine and surfaces at the signature instead.
+Only a field that is not part of an Ethereum transaction — the method — is
+caught by the round-trip and nothing before it.
 
 ### A note on the ClojureScript suite
 

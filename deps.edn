@@ -17,7 +17,7 @@
  :deps {io.github.kotoba-lang/io-filecoin
         {:git/sha "244db55c2351fe942a2753cbecdb089c0f8d6e1e"}
         io.github.kotoba-lang/io-filecoin-signer
-        {:git/sha "0e679827622bf0734b26a13bf3ad4616d1c28a4c"}
+        {:git/sha "7adb018f1938769432caf337758a6cdc3b410a72"}
         io.github.kotoba-lang/org-ethereum-abi
         {:git/sha "f3e5662d86977b50224e5e890f953cb5e4b3f441"}}
  ;; cloud-filecoin is a *test* dependency only: the live suite calls a real

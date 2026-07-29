@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "test:cljs": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/verify-cljs.cljs",
-    "live": "FILECOIN_LIVE=1 nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/live.cljs"
+    "live": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/live.cljs",
+    "probe:delegated": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-delegated.cljs"
   },
   "comment": "@noble/hashes is not used here; io-multiformats' :cljs branch loads it at require time.",
   "dependencies": {
