@@ -4,10 +4,16 @@
   "scripts": {
     "test:cljs": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/verify-cljs.cljs",
     "live": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/live.cljs",
+    "probe:provider": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-provider.cljs",
     "probe:delegated": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-delegated.cljs"
   },
   "comment": "@noble/hashes is not used here; io-multiformats' :cljs branch loads it at require time.",
   "dependencies": {
+    "@noble/curves": "^2.2.0",
     "@noble/hashes": "^2.0.1"
+  },
+  "devDependencies": {
+    "@filoz/synapse-core": "^0.7.1",
+    "viem": "^2.55.10"
   }
 }
