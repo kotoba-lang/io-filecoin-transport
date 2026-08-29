@@ -7,10 +7,9 @@
     "probe:provider": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-provider.cljs",
     "probe:delegated": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-delegated.cljs"
   },
-  "comment": "@noble/hashes is not used here; io-multiformats' :cljs branch loads it at require time.",
+  "comment": "@noble/curves remains until eth-crypto cljs path is rewired.",
   "dependencies": {
-    "@noble/curves": "^2.2.0",
-    "@noble/hashes": "^2.0.1"
+    "@noble/curves": "^2.2.0"
   },
   "devDependencies": {
     "@filoz/synapse-core": "^0.7.1",
