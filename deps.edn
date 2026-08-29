@@ -15,7 +15,7 @@
 ;; capability.
 {:paths ["src"]
  :deps {io.github.kotoba-lang/io-filecoin
-        {:git/sha "244db55c2351fe942a2753cbecdb089c0f8d6e1e"}
+        {:git/sha "5cae99bfd68e28518db28edf8df0eac88336d3ba"}
         io.github.kotoba-lang/io-filecoin-signer
         {:git/sha "7adb018f1938769432caf337758a6cdc3b410a72"}
         io.github.kotoba-lang/org-ethereum-abi
