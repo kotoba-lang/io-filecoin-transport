@@ -7,7 +7,7 @@
   the ClojureScript side silently asserted half as much — 10 assertions where
   the JVM ran 19, and the reporter said green either way. `clojure.test/async`
   is what makes the runner wait."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [clojure.test :as t :refer [deftest is]]
             [filecoin.client :as client]
             [filecoin.message :as msg]
