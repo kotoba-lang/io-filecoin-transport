@@ -31,7 +31,7 @@
   Everything except `push` and `send-message`. A node needs no authorisation
   to be asked a question, so all of the reads below work against a public
   endpoint with no key and no funds — which is what the live suite uses."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [ethereum.abi :as abi]
             [filecoin.message :as msg]
             [filecoin.protocols :as p]
