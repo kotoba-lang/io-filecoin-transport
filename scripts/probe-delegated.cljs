@@ -17,7 +17,7 @@
 ;; Nothing is spent: the sending f410f has never existed, balance is checked
 ;; first, and every push is rejected by construction. Calibration.
 (ns probe-delegated
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [filecoin.client :as client]
             [filecoin.cloud.chain :as chain]
             [filecoin.signature :as sig]
