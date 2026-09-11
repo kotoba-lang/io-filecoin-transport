@@ -133,7 +133,7 @@ npm run probe:delegated  # calibration, the delegated-path differential
 
 ### The delegated-path probe
 
-`scripts/probe-delegated.cljs` establishes that lotus accepts a **type-3**
+`scripts/probe-delegated.cljk` establishes that lotus accepts a **type-3**
 (FEVM) message built by `filecoin.signer.eth`, without spending anything. It
 pushes three messages from an account that has never existed and reads which
 check caught each:
