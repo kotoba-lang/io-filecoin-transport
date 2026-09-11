@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 ;; Talk to Filecoin mainnet, for real.
 ;;
 ;; Every check here is **read-only**: `ChainHead`, `StateGetActor`,

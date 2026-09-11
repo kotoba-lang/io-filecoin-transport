@@ -125,7 +125,7 @@ as a malformed request rather than an un-normalised one. Fixed in io-filecoin
 mainnet and calibration.**
 
 ```sh
-clojure -M:test        # JVM, offline
+kbb -M:test        # JVM, offline
 npm run test:cljs      # nbb, offline
 npm run live           # mainnet, read-only
 npm run probe:delegated  # calibration, the delegated-path differential

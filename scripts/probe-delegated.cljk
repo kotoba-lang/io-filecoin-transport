@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 ;; Three-way differential on the DELEGATED (FEVM) sender path.
 ;;
 ;; lotus's AuthenticateMessage does, in this order:
