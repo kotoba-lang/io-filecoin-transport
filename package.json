@@ -2,10 +2,10 @@
   "name": "io-filecoin-transport",
   "private": true,
   "scripts": {
-    "test:cljs": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/verify-cljs.cljs",
-    "live": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/live.cljs",
-    "probe:provider": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-provider.cljs",
-    "probe:delegated": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-delegated.cljs"
+    "test:cljs": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/verify-cljs.cljk",
+    "live": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/live.cljk",
+    "probe:provider": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-provider.cljk",
+    "probe:delegated": "nbb --classpath \"$(clojure -A:cljs -Spath)\" scripts/probe-delegated.cljk"
   },
   "comment": "@noble/curves remains until eth-crypto cljs path is rewired.",
   "dependencies": {

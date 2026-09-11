@@ -35,7 +35,7 @@ jobs:
           cli: latest
       - run: npm install -g nbb
       - run: npm ci
-      - run: nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljs
+      - run: nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljk
 
   # The live suite is deliberately absent. It talks to a public mainnet
   # endpoint, so it is neither hermetic nor free of someone else's rate limit;

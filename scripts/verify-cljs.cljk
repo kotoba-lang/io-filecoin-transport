@@ -5,7 +5,7 @@
 ;; every sequence in `filecoin.client` composes differently on this path.
 ;; The live suite is separate — `npm run live`, and it is not run in CI.
 ;;
-;;   nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljs
+;;   nbb --classpath "$(clojure -A:cljs -Spath)" scripts/verify-cljs.cljk
 (ns verify-cljs
   (:require [clojure.test :as t]
             [filecoin.client-test]))
