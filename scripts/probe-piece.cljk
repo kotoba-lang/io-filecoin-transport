@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 (ns probe-piece
   (:require [filecoin.client :as client]
             [filecoin.cloud.chain :as chain]

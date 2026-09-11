@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 ;; End-to-end against a real storage provider, read-only.
 ;;
 ;;   chain  -> a PieceCID that is genuinely stored (PDPVerifier.getPieceCid)

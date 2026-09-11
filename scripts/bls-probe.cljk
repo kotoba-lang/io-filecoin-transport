@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 (ns bls-probe
   (:require ["@noble/curves/bls12-381.js" :refer [bls12_381]]
             [filecoin.address :as addr]
