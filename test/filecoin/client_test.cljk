@@ -8,7 +8,7 @@
   the JVM ran 19, and the reporter said green either way. `clojure.test/async`
   is what makes the runner wait."
   (:require [kotoba.lang.text :as str]
-            [clojure.test :as t :refer [deftest is]]
+            [kotoba.test :as t :refer [deftest is]]
             [filecoin.client :as client]
             [filecoin.message :as msg]
             [filecoin.protocols :as p]
