@@ -24,6 +24,14 @@ node.
 ;; prepare → sign → push, in that order
 ```
 
+For a provider's byte endpoint, pass a byte sequence as `:body` with
+`:method :put`, or request `:response-type :bytes` on a GET. The result's
+`:body` is a JVM byte array or a JS Uint8Array, and `:headers` includes
+response headers such as the upload ticket's `Location`. The default remains
+UTF-8 text for JSON-RPC. A loopback HTTP test sends and receives bytes
+`00 7f 80 ff` on both runtimes. Transferring bytes alone is not a durable
+Filecoin deal; the on-chain custody and payment steps are separate.
+
 ## The sequence is the point
 
 A single request is easy. The order is where a client goes wrong, in ways no

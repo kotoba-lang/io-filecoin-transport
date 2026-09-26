@@ -8,7 +8,8 @@
 ;;   kbb --backend sci --classpath "$(kbb -A:cljs -Spath)" scripts/verify-cljs.cljk
 (ns verify-cljs
   (:require [kotoba.test :as t]
-            [filecoin.client-test]))
+            [filecoin.client-test]
+            [filecoin.transport-binary-test]))
 
 (defmethod t/report [:cljs.test/default :end-run-tests] [m]
   (println)
@@ -17,4 +18,4 @@
     (do (println "FAILED on the ClojureScript path")
         (js/process.exit 1))))
 
-(t/run-tests 'filecoin.client-test)
+(t/run-tests 'filecoin.client-test 'filecoin.transport-binary-test)
