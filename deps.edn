@@ -24,7 +24,7 @@
         ;; this repo silently rides whatever a sibling happens to name.
         io.github.kotoba-lang/text {:git/sha "73bdb13ae7a3d004b44bca08be03a3191157a38f"}
        io.github.kotoba-lang/io-filecoin
-        {:git/sha "5cae99bfd68e28518db28edf8df0eac88336d3ba"}
+        {:git/sha "a163e4a2fe893d74b45f9303aea07f9ac2a77297"}
         io.github.kotoba-lang/io-filecoin-signer
         {:git/sha "7adb018f1938769432caf337758a6cdc3b410a72"}
         io.github.kotoba-lang/org-ethereum-abi

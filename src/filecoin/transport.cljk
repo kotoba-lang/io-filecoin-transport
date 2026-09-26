@@ -20,7 +20,7 @@
   (into {} (map (fn [[k v]] [(name k) (str v)])) headers))
 
 #?(:clj
-   (defn- send-jvm [{:keys [method url headers body]} timeout-ms]
+   (defn- send-jvm [{:keys [method url headers body response-type]} timeout-ms]
      (let [client (-> (java.net.http.HttpClient/newBuilder)
                       (.connectTimeout (java.time.Duration/ofMillis timeout-ms))
                       (.build))
@@ -32,26 +32,47 @@
                            (string-headers headers))
            builder (if (= :get method)
                      (.GET builder)
-                     (.POST builder (java.net.http.HttpRequest$BodyPublishers/ofString
-                                     (or body ""))))
+                     (.method builder (.toUpperCase (name (or method :post)))
+                              (if (or (nil? body) (string? body))
+                                (java.net.http.HttpRequest$BodyPublishers/ofString
+                                 (or body ""))
+                                (java.net.http.HttpRequest$BodyPublishers/ofByteArray
+                                 (byte-array (map unchecked-byte body))))))
            resp (.send client (.build builder)
-                       (java.net.http.HttpResponse$BodyHandlers/ofString))]
-       {:status (.statusCode resp) :body (.body resp)})))
+                       (if (= :bytes response-type)
+                         (java.net.http.HttpResponse$BodyHandlers/ofByteArray)
+                         (java.net.http.HttpResponse$BodyHandlers/ofString)))]
+       {:status (.statusCode resp)
+        :headers (into {} (map (fn [[k values]] [k (first values)]))
+                       (.map (.headers resp)))
+        :body (.body resp)})))
 
 #?(:cljs
-   (defn- send-js [{:keys [method url headers body]} timeout-ms]
+   (defn- send-js [{:keys [method url headers body response-type]} timeout-ms]
      (let [ctl (js/AbortController.)
            timer (js/setTimeout #(.abort ctl) timeout-ms)]
        (-> (js/fetch url
-                     #js {:method (if (= :get method) "GET" "POST")
+                     #js {:method (.toUpperCase (name (or method :post)))
                           :headers (clj->js (string-headers headers))
-                          :body (when-not (= :get method) body)
+                          :body (when-not (= :get method)
+                                  (if (or (nil? body) (string? body))
+                                    body
+                                    (js/Uint8Array.
+                                     (clj->js (mapv #(bit-and (int %) 255) body)))))
                           :signal (.-signal ctl)})
            (.then (fn [r]
-                    (-> (.text r)
-                        (.then (fn [t]
-                                 (js/clearTimeout timer)
-                                 {:status (.-status r) :body t})))))
+                    (let [received-headers (atom {})]
+                      (.forEach (.-headers r)
+                                (fn [value key]
+                                  (swap! received-headers assoc key value)))
+                      (-> (if (= :bytes response-type) (.arrayBuffer r) (.text r))
+                          (.then (fn [raw]
+                                   (js/clearTimeout timer)
+                                   {:status (.-status r)
+                                    :headers @received-headers
+                                    :body (if (= :bytes response-type)
+                                            (js/Uint8Array. raw)
+                                            raw)}))))))
            (.catch (fn [e] (js/clearTimeout timer) (throw e)))))))
 
 (defn http
