@@ -86,18 +86,10 @@
                     (fn [rest-hits] (if hit (into [hit] rest-hits) rest-hits)))))))
 
 (defn- fetch-bytes
-  "Raw bytes, bypassing `IHttp`.
-
-  `filecoin.protocols/IHttp` specifies `body` as a **String**, and
-  `filecoin.transport` produces it with `.text()`. That is right for JSON-RPC
-  and wrong for a piece: UTF-8 decoding rewrites every byte above 0x7f, so a
-  binary payload cannot survive the protocol as currently specified. Widening
-  IHttp is the fix; this bypass keeps the probe honest until then."
+  "Retrieve through the same byte-safe IHttp path used by provider clients."
   [url]
-  (-> (js/fetch url)
-      (.then (fn [r] (.then (.arrayBuffer r)
-                            (fn [b] {:status (.-status r)
-                                     :bytes (vec (js/Uint8Array. b))}))))))
+  (-> (p/request http (prov/get-piece-request url))
+      (.then (fn [r] {:status (:status r) :bytes (vec (:body r))}))))
 
 (defn- download-and-verify [cid entry]
   (let [u (prov/piece-url (:url entry) cid)]
