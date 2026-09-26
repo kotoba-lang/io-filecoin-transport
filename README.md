@@ -38,6 +38,17 @@ reported the chain-derived piece present; 4 returned 204,898 bytes matching
 the PieceCID and 11 failed byte verification or retrieval. This proves the
 transport can preserve bytes from real providers, not custody of our CARs.
 
+`npm run probe:upload-canary` sends a public 127-byte canary to one selected
+provider and verifies its PieceCID after retrieval. To probe a public CAR,
+set `FILECOIN_CANARY_FILE`, `FILECOIN_CANARY_SHA256`, and
+`FILECOIN_CANARY_PIECE_CID`; the script checks both identities before any
+network request and refuses files over 4 MiB. In a 2026-09-26 16:00 UTC run,
+the 20,007-byte Yataverse apex CAR with SHA-256
+`579bb7a70d702a831fa5d4329043e62f3ef37659497fb714974f5d173b1d67b7`
+received HTTP 204 on PUT and was read back with PieceCID
+`bafkzcibd3fqqvdbpswakueaauvwwtfsvgbw7wapwap4dpgffmj2evphn2owumfab`.
+This is a transfer and retrieval receipt, not a durable Filecoin contract.
+
 ## The sequence is the point
 
 A single request is easy. The order is where a client goes wrong, in ways no
