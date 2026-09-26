@@ -32,6 +32,12 @@ UTF-8 text for JSON-RPC. A loopback HTTP test sends and receives bytes
 `00 7f 80 ff` on both runtimes. Transferring bytes alone is not a durable
 Filecoin deal; the on-chain custody and payment steps are separate.
 
+`npm run probe:provider` now retrieves through `IHttp` and recomputes the
+PieceCID. In a 2026-09-26 15:48 UTC mainnet read-only run, 15 providers
+reported the chain-derived piece present; 4 returned 204,898 bytes matching
+the PieceCID and 11 failed byte verification or retrieval. This proves the
+transport can preserve bytes from real providers, not custody of our CARs.
+
 ## The sequence is the point
 
 A single request is easy. The order is where a client goes wrong, in ways no
